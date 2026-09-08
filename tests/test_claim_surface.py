@@ -578,6 +578,7 @@ def test_advertised_test_and_mutation_counts_are_true():
         "tests/test_thermal_safety.py",
         "tests/test_formulation.py",
         "tests/test_documented_claims.py",
+        "tests/test_figures.py",
     )
     real_total = 0
     for rel in external:

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 620" width="1240" height="620" role="img" aria-label="The sugar and salt asymmetry">
+<title>The sugar and salt asymmetry</title>
+<desc>Sucrose raises yolk D60 by 10x and NaCl by 12.75x, so sugar enters the yolk after heating and the white during heating.</desc>
+<rect width="1240" height="620" fill="#fbf7ef"/>
+<style>text{font-family:Georgia,"Times New Roman",serif;fill:#12100c}.n{font-family:"DejaVu Sans Mono",Consolas,monospace}.fa{font-family:"DejaVu Sans","Noto Naskh Arabic",sans-serif}</style>
+<text x="80" y="52" font-size="23">Why sugar goes in at opposite times</text>
+<text x="80" y="75" font-size="13.5" fill="#5b5344">Sugar protects Salmonella. So it must enter the yolk AFTER the kill step &#8212; but the white has no such option.</text>
+<rect x="80" y="118" width="500" height="360" fill="none" stroke="#d8cdb8" stroke-width="1.4" rx="4"/>
+<rect x="80" y="118" width="500" height="4" fill="#c8860d"/>
+<text x="102" y="156" font-size="19">Yolk &#8212; sugar AFTER heating</text>
+<text x="102" y="178" font-size="13" fill="#5b5344">sugar makes the bug harder to kill, so heat first</text>
+<rect x="660" y="118" width="500" height="360" fill="none" stroke="#d8cdb8" stroke-width="1.4" rx="4"/>
+<rect x="660" y="118" width="500" height="4" fill="#6b4423"/>
+<text x="682" y="156" font-size="19">White &#8212; sugar DURING heating</text>
+<text x="682" y="178" font-size="13" fill="#5b5344">plain white would cook; a sugared matrix is forced</text>
+<text x="102" y="214" font-size="13.5">plain yolk</text>
+<rect x="102" y="224" width="300" height="15" fill="#d8cdb8" opacity="0.45" rx="2"/>
+<rect x="102" y="224" width="23.5" height="15" fill="#1d6f63" rx="2"/>
+<text x="414" y="236" font-size="13" class="n">D60=0.40</text>
+<text x="102" y="288" font-size="13.5">+ 10% sucrose</text>
+<rect x="102" y="298" width="300" height="15" fill="#d8cdb8" opacity="0.45" rx="2"/>
+<rect x="102" y="298" width="235.3" height="15" fill="#c8860d" rx="2"/>
+<text x="414" y="310" font-size="13" class="n">D60=4.00</text>
+<text x="102" y="330" font-size="12.5" fill="#a3401f">10&#215; harder to kill</text>
+<text x="102" y="362" font-size="13.5">+ 10% NaCl</text>
+<rect x="102" y="372" width="300" height="15" fill="#d8cdb8" opacity="0.45" rx="2"/>
+<rect x="102" y="372" width="300.0" height="15" fill="#a3401f" rx="2"/>
+<text x="414" y="384" font-size="13" class="n">D60=5.10</text>
+<text x="102" y="404" font-size="12.5" fill="#a3401f">12.75&#215; harder to kill</text>
+<text x="682" y="214" font-size="13.5">plain white</text>
+<rect x="682" y="224" width="300" height="15" fill="#d8cdb8" opacity="0.45" rx="2"/>
+<rect x="682" y="224" width="32.4" height="15" fill="#1d6f63" rx="2"/>
+<text x="994" y="236" font-size="13" class="n">D55=0.55</text>
+<text x="682" y="256" font-size="12.5" fill="#a3401f">but it coagulates at this temperature</text>
+<text x="682" y="288" font-size="13.5">+ 10% sucrose</text>
+<rect x="682" y="298" width="300" height="15" fill="#d8cdb8" opacity="0.45" rx="2"/>
+<rect x="682" y="298" width="70.6" height="15" fill="#6b4423" rx="2"/>
+<text x="994" y="310" font-size="13" class="n">D55=1.20</text>
+<text x="682" y="330" font-size="12.5" fill="#a3401f">2.2&#215; harder to kill, and unavoidable</text>
+<line x1="80" y1="492" x2="1160" y2="492" stroke="#d8cdb8" stroke-width="1"/>
+<text x="80" y="514" font-size="13.5" fill="#12100c">The yolk therefore reaches its kill step as PLAIN yolk diluted with egg white, and receives its 14 g of sugar only afterwards.</text>
+<text x="80" y="535" font-size="13.5" fill="#5b5344">The white is heated to 71 &#176;C in the Swiss-meringue method, which buys back the lethality that its sugar load costs.</text>
+<text x="80" y="556" font-size="13.5" fill="#5b5344">Same ingredient, opposite timing, for opposing reasons &#8212; and both directions are measured, not assumed.</text>
+<text x="80" y="598" font-size="12.5" fill="#5b5344">D-values: Garibaldi, Straka &#38; Ijichi 1969, Appl Microbiol 17(4):491-496. Read from page scans in data/garibaldi/, not from a secondary source.</text>
+</svg>

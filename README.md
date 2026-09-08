@@ -45,6 +45,10 @@ and discard the white — ~35 g of the best natural foaming agent in a
 kitchen. **The solution:** use both, without letting them destroy each
 other.
 
+<p align="center">
+  <img src="assets/01-layers.svg" alt="Cross-section of the drink: a meringue foam layer of 58.90 g over a 30.00 g double espresso over a 37.40 g yolk custard base, 126.9 g in total from one egg. Band heights are proportional to computed volume." width="100%">
+</p>
+
 📄 **[Read the recipe →](docs/RECIPE.md)**
 📚 **[Sources →](docs/SOURCES.md)**
 ⚠️ **[Limitations — what is NOT proven →](docs/LIMITATIONS.md)**
@@ -96,6 +100,10 @@ a control.
 Yolk LDL out-competes albumen at the air–water interface but can't form
 a stable film.
 
+<p align="center">
+  <img src="assets/04-density.svg" alt="Left: densities of 1.15, 1.01 and 0.35 g per mL for the yolk base, espresso and meringue foam, which stratify in that order. Right: foam damage is observed at 0.022 percent yolk contamination, so the requirement is zero deliberate yolk carryover." width="100%">
+</p>
+
 So the two halves are built **separately** and layered. That constraint
 is what gives the drink its architecture.
 
@@ -107,7 +115,7 @@ is what gives the drink its architecture.
 src/thermal_safety.py    D-z lethality engine + evidence grading
 src/formulation.py       recipe model, foam integrity, layering estimates
 src/report.py            full report with evidence grades
-tests/                   146 tests
+tests/                   163 tests
 data/garibaldi/          primary-source page scans (PMC377728)
 docs/RECIPE.md           the practical recipe
 docs/SOURCES.md          constants with citations
@@ -120,6 +128,7 @@ python3 tests/test_thermal_safety.py    # 70 tests
 python3 tests/test_formulation.py       # 41 tests
 python3 tests/test_documented_claims.py # 15 tests
 python3 tests/test_claim_surface.py     # 20 tests - reads the PROSE
+python3 tests/test_figures.py           # 17 tests - reads the FIGURES
 ```
 
 ---
@@ -274,6 +283,10 @@ unverified assumptions drift toward the conclusion you were hoping for.
 
 ## Process (modelled, with evidence grades)
 
+<p align="center">
+  <img src="assets/02-thermal.svg" alt="Temperature-time plot of the yolk kill step: a 1.5 minute ramp to 62 degrees Celsius followed by a 10 minute hold, staying below the temperature at which yolk sets. Alongside, the log10 reductions achieved in three published matrices: 7.93 plain yolk, 6.57 with 10 percent sucrose, 5.37 with 10 percent salt, all above the 5-log target." width="100%">
+</p>
+
 | Step | Process | Result | Evidence |
 |---|---|---|---|
 | Yolk base | 62 °C / 10 min, **plain** | 7.93 log₁₀, matrix-matched | `MODELLED (in-window)` |
@@ -315,6 +328,10 @@ phase only**.
 
 ### The three levels of evidence
 
+<p align="center">
+  <img src="assets/05-evidence.svg" alt="Three evidence levels. Level 1, implementation, is ESTABLISHED. Level 2, process, is NOT ESTABLISHED because no thermocouple data exists. Level 3, microbiology, is NOT ESTABLISHED because no challenge study has been run." width="100%">
+</p>
+
 The two steps do **not** rest on equally strong evidence, and the code
 now enforces the distinction rather than promising it in prose:
 
@@ -344,6 +361,10 @@ Every log₁₀ figure here is for ***Salmonella* and nothing else.**
 these temperatures.
 
 ### The sugar asymmetry
+
+<p align="center">
+  <img src="assets/03-asymmetry.svg" alt="Two panels comparing D-values. In yolk, sucrose raises D60 from 0.40 to 4.00 minutes and salt to 5.10 minutes, so sugar is added after heating. In egg white, sucrose raises D55 from 0.55 to 1.20 minutes but plain white coagulates, so a sugared matrix is unavoidable and sugar goes in during heating." width="100%">
+</p>
 
 Sugar enters the two layers at **opposite times**, for opposing reasons:
 
