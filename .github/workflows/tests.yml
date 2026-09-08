@@ -1,0 +1,231 @@
+name: tests
+
+# Added in response to a review point that was entirely fair: the PR
+# claimed "110 tests pass" with no CI run on the commit, so the claim
+# was unverifiable by anyone but the author. A project whose premise is
+# "trust nothing, verify everything" cannot ask for trust on its own
+# test results.
+on:
+  push:
+    branches: [ main, genspark_ai_developer ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The suites use only the standard library, so they must work on
+        # any supported interpreter. If a future change quietly depends
+        # on a newer feature, this matrix catches it.
+        python-version: [ "3.10", "3.11", "3.12", "3.13" ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Confirm zero third-party dependencies
+        run: |
+          test ! -f requirements.txt || {
+            echo "requirements.txt appeared; this project is stdlib-only"
+            exit 1
+          }
+          python -c "import sys; print(sys.version)"
+
+      - name: Thermal safety suite
+        run: python tests/test_thermal_safety.py
+
+      - name: Formulation suite
+        run: python tests/test_formulation.py
+
+      - name: Documented-claims suite
+        run: python tests/test_documented_claims.py
+
+      - name: Claim-surface audit (reads the PROSE, not the numbers)
+        # Every defect found in rounds 3-6 was a sentence, not a number,
+        # and the numeric suites stayed green through all of them.
+        run: python tests/test_claim_surface.py
+
+      - name: Report renders without error
+        run: python src/report.py > /dev/null
+
+      - name: Assert the advertised test count
+        # Guards against a suite silently shrinking - a passing run with
+        # fewer tests would otherwise look identical to a healthy one.
+        run: |
+          python - <<'PY'
+          import re, subprocess, sys
+
+          expected = {
+              "tests/test_thermal_safety.py": 70,
+              "tests/test_formulation.py": 41,
+              "tests/test_documented_claims.py": 15,
+              "tests/test_claim_surface.py": 11,
+          }
+          total = 0
+          failed = False
+          for path, want in expected.items():
+              out = subprocess.run(
+                  [sys.executable, path], capture_output=True, text=True
+              ).stdout
+              m = re.search(r"(\d+)/(\d+) passed", out)
+              if not m:
+                  print(f"FAIL {path}: no summary line found")
+                  failed = True
+                  continue
+              passed, ran = int(m.group(1)), int(m.group(2))
+              total += passed
+              status = "ok" if (passed == ran == want) else "MISMATCH"
+              print(f"{status:8s} {path}: {passed}/{ran} (expected {want})")
+              if passed != ran or ran != want:
+                  failed = True
+          print(f"total passing: {total}")
+          if failed:
+              sys.exit("test counts do not match the documented figures")
+          PY
+
+  mutation:
+    # Proves the suite has teeth: each mutation reverts one real,
+    # previously-shipped bug and MUST be caught. A suite that passes
+    # both with and without a fix is not protecting the fix.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Every mutation must be caught
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+
+          SUITES = [
+              "tests/test_thermal_safety.py",
+              "tests/test_formulation.py",
+              "tests/test_documented_claims.py",
+              "tests/test_claim_surface.py",
+          ]
+
+          # (label, file, old, new)
+          MUTATIONS = [
+              ("salt back into the kill step", "src/formulation.py",
+               'PREHEAT_BASE_INGREDIENTS = ("egg yolk", "egg white (base diluent)")',
+               'PREHEAT_BASE_INGREDIENTS = ("egg yolk", "egg white (base diluent)", "fine salt (base)")'),
+              ("diluent reverted to ~water", "src/formulation.py",
+               "YOLK_DILUENT_WHITE_G = 5.2", "YOLK_DILUENT_WHITE_G = 0.01"),
+              ("ramp inflated to 4.0 min", "src/formulation.py",
+               "YOLK_RAMP_MINUTES = 1.5", "YOLK_RAMP_MINUTES = 4.0"),
+              ("hold cut below benchmark", "src/formulation.py",
+               "YOLK_HOLD_MINUTES = 10.0", "YOLK_HOLD_MINUTES = 3.0"),
+              ("temp raised past setting point", "src/formulation.py",
+               "YOLK_CUSTARD_TARGET_C = 62.0", "YOLK_CUSTARD_TARGET_C = 66.0"),
+              ("foam threshold back to lax 0.5%", "src/formulation.py",
+               "FOAM_DAMAGE_MOST_SENSITIVE_FRACTION = 0.00022",
+               "FOAM_DAMAGE_MOST_SENSITIVE_FRACTION = 0.005"),
+              ("endpoint-only integrator", "src/thermal_safety.py",
+               "SUBDIVISION_STEPS = 512", "SUBDIVISION_STEPS = 1"),
+              ("Garibaldi window back to figure axis", "src/thermal_safety.py",
+               "    valid_min_c=53.0,\n    valid_max_c=59.5,",
+               "    valid_min_c=50.0,\n    valid_max_c=62.0,"),
+
+              # ---- PROSE mutations -------------------------------------
+              #
+              # Every defect found in review rounds 3-6 was a SENTENCE,
+              # not a number, and the numeric suites stayed green through
+              # all of them. These mutations reinstate retired wording
+              # verbatim. If any survives, the claim-surface audit is
+              # decorative.
+              ("prose: reinstate the 62 C all-in-window claim",
+               "src/formulation.py",
+               "Cost: a longer hold. Accepted - see YOLK_HOLD_MINUTES.",
+               "At 62 C all three models are genuinely in-window.\n\n"
+               "Cost: a longer hold. Accepted - see YOLK_HOLD_MINUTES."),
+
+              # This one self-quarantined on the first attempt, because
+              # the forbidden phrase contains the word "former", which
+              # was itself a quarantine marker. Kept as a permanent
+              # regression test for that laundering hole.
+              ("prose: 'former ... still valid' beside a retirement note",
+               "src/thermal_safety.py",
+               "   FSIS Table 1 (reproducing the SUPERSEDED regulatory table; these",
+               "   FSIS Table 1 (former regulation safe harbours, still valid):\n"
+               "   FSIS Table 1 (reproducing the SUPERSEDED regulatory table; these"),
+
+              ("prose: superseded table described in the present tense",
+               "docs/RECIPE.md",
+               "### Layer 1 \u2014 Yolk base (37.4 g)",
+               "9 CFR 590.570 Table I requires 142 F for plain yolk.\n\n"
+               "### Layer 1 \u2014 Yolk base (37.4 g)"),
+
+              ("prose: claim the finished drink is validated",
+               "README.md",
+               "## Rejected on purpose",
+               "The drink is validated and safe to serve.\n\n"
+               "## Rejected on purpose"),
+          ]
+
+          def failures():
+              # Counts BOTH reported failures and non-zero exit codes.
+              #
+              # An earlier version counted only occurrences of "FAIL" on
+              # stdout. That was proven fragile: a suite killed by a
+              # SyntaxError prints no "FAIL" at all, so a mutation that
+              # broke a module outright scored identically to a healthy
+              # passing run. Verified locally - a deliberately broken
+              # file gives FAIL count 0 with returncode 1.
+              #
+              # A mutation harness that cannot distinguish "caught" from
+              # "crashed" is the same failure class as everything else
+              # this project has had to correct: a check that looks
+              # rigorous while silently approving.
+              n = 0
+              for s in SUITES:
+                  proc = subprocess.run(
+                      [sys.executable, s], capture_output=True, text=True
+                  )
+                  n += proc.stdout.count("FAIL")
+                  if proc.returncode != 0 and "FAIL" not in proc.stdout:
+                      # Crashed rather than failed a test: still a
+                      # detection, but report it distinctly.
+                      print(
+                          f"    [{s} exited {proc.returncode} without a "
+                          f"FAIL line: {proc.stderr.strip()[:160]}]"
+                      )
+                      n += 1
+              return n
+
+          if failures():
+              sys.exit("baseline is not green; fix that before mutating")
+          print("baseline green\n")
+
+          survivors = []
+          for label, path, old, new in MUTATIONS:
+              p = pathlib.Path(path)
+              original = p.read_text()
+              if original.count(old) != 1:
+                  survivors.append(f"{label} (pattern not found - stale mutation)")
+                  print(f"ERROR   {label}: pattern absent, cannot test")
+                  continue
+              p.write_text(original.replace(old, new, 1))
+              try:
+                  caught = failures()
+              finally:
+                  p.write_text(original)
+              if caught:
+                  print(f"caught  {label}  ({caught} failing tests)")
+              else:
+                  print(f"SURVIVED {label}")
+                  survivors.append(label)
+
+          if survivors:
+              sys.exit("mutations survived: " + "; ".join(survivors))
+          print("\nall mutations caught")
+          PY
