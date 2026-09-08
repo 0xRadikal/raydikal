@@ -71,6 +71,7 @@ jobs:
               "tests/test_formulation.py": 41,
               "tests/test_documented_claims.py": 15,
               "tests/test_claim_surface.py": 20,
+              "tests/test_figures.py": 17,
           }
           total = 0
           failed = False
@@ -115,6 +116,7 @@ jobs:
               "tests/test_formulation.py",
               "tests/test_documented_claims.py",
               "tests/test_claim_surface.py",
+              "tests/test_figures.py",
           ]
 
           # (label, file, old, new)
@@ -180,6 +182,24 @@ jobs:
               # "to choke / to strangle" in Arabic and Ottoman Turkish.
               # A copy-paste from an older commit must not restore it,
               # and no tooling/AI reference may re-enter the project.
+              # ---- FIGURE mutations ------------------------------------
+              #
+              # A diagram is the first thing a reader believes and the
+              # last thing anyone re-checks, so a stale figure is the
+              # highest-leverage lie this repository could ship. These
+              # two prove the figure audit actually bites: one edits a
+              # committed SVG by hand, the other changes a constant
+              # WITHOUT regenerating, which is how drift really happens.
+              ("figure: hand-edit a committed SVG",
+               "assets/02-thermal.svg",
+               "hold 10 min",
+               "hold 3 min"),
+
+              ("figure: change a constant without regenerating",
+               "src/formulation.py",
+               "YOLK_CUSTARD_TARGET_C = 62.0",
+               "YOLK_CUSTARD_TARGET_C = 63.0"),
+
               # ---- SELF-REPORTING mutations ----------------------------
               #
               # report.py printed "137 tests" and "12 mutations" to the
@@ -191,7 +211,7 @@ jobs:
               # misreport the size of its own audit.
               ("self-report: stale test count in the report",
                "src/report.py",
-               "ESTABLISHED. 146 tests",
+               "ESTABLISHED. 163 tests",
                "ESTABLISHED. 137 tests"),
 
               ("naming: reintroduce the retired drink name",

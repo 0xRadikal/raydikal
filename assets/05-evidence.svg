@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 480" width="1240" height="480" role="img" aria-label="Three levels of evidence">
+<title>Three levels of evidence</title>
+<desc>Level 1 implementation established; Level 2 process and Level 3 microbiology NOT established.</desc>
+<rect width="1240" height="480" fill="#fbf7ef"/>
+<style>text{font-family:Georgia,"Times New Roman",serif;fill:#12100c}.n{font-family:"DejaVu Sans Mono",Consolas,monospace}.fa{font-family:"DejaVu Sans","Noto Naskh Arabic",sans-serif}</style>
+<text x="80" y="52" font-size="23">Three levels of evidence, and only one of them is met</text>
+<text x="80" y="75" font-size="13.5" fill="#5b5344">The most important figure here is the one that says NO. A model checked against published data is not a validated drink.</text>
+<rect x="80" y="120" width="1080" height="96" fill="none" stroke="#d8cdb8" stroke-width="1.3" rx="4"/>
+<rect x="80" y="120" width="6" height="96" fill="#1d6f63"/>
+<text x="106" y="150" font-size="13" class="n" fill="#5b5344">Level 1</text>
+<text x="176" y="150" font-size="17">IMPLEMENTATION</text>
+<text x="176" y="172" font-size="13.5" fill="#5b5344">Is the arithmetic right?</text>
+<text x="176" y="198" font-size="12.5" fill="#5b5344">Integrator checked against a closed-form analytical solution; models reproduce FSIS rows they were never calibrated on.</text>
+<rect x="960" y="136" width="182" height="30" fill="#1d6f63" opacity="0.12" rx="3"/>
+<text x="1051" y="156" font-size="13.5" fill="#1d6f63" text-anchor="middle" letter-spacing="0.4">ESTABLISHED</text>
+<rect x="80" y="230" width="1080" height="96" fill="none" stroke="#d8cdb8" stroke-width="1.3" rx="4"/>
+<rect x="80" y="230" width="6" height="96" fill="#a3401f"/>
+<text x="106" y="260" font-size="13" class="n" fill="#5b5344">Level 2</text>
+<text x="176" y="260" font-size="17">PROCESS</text>
+<text x="176" y="282" font-size="13.5" fill="#5b5344">Did the real drink follow the modelled curve?</text>
+<text x="176" y="308" font-size="12.5" fill="#5b5344">No thermocouple data exists. Every ThermalHistory carries provenance=ASSUMED, enforced by the type system.</text>
+<rect x="960" y="246" width="182" height="30" fill="#a3401f" opacity="0.12" rx="3"/>
+<text x="1051" y="266" font-size="13.5" fill="#a3401f" text-anchor="middle" letter-spacing="0.4">NOT ESTABLISHED</text>
+<rect x="80" y="340" width="1080" height="96" fill="none" stroke="#d8cdb8" stroke-width="1.3" rx="4"/>
+<rect x="80" y="340" width="6" height="96" fill="#a3401f"/>
+<text x="106" y="370" font-size="13" class="n" fill="#5b5344">Level 3</text>
+<text x="176" y="370" font-size="17">MICROBIOLOGY</text>
+<text x="176" y="392" font-size="13.5" fill="#5b5344">Does the finished matrix achieve the reduction?</text>
+<text x="176" y="418" font-size="12.5" fill="#5b5344">No challenge study has been run on the finished drink. Every log figure is for Salmonella only.</text>
+<rect x="960" y="356" width="182" height="30" fill="#a3401f" opacity="0.12" rx="3"/>
+<text x="1051" y="376" font-size="13.5" fill="#a3401f" text-anchor="middle" letter-spacing="0.4">NOT ESTABLISHED</text>
+<text x="80" y="468" font-size="14">The implementation has been checked. <tspan font-style="italic">The drink has not been validated.</tspan> Those are different claims, and an earlier version of these docs blurred them.</text>
+</svg>
